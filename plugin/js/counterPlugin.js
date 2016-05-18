@@ -1,8 +1,18 @@
 
+//set value of time to a hh:mm format 
+function setTime(timePassed) {
+
+	var minutes = Math.floor(timePassed / 60),   
+    	seconds = Math.floor(timePassed - minutes * 60),
+    	x = minutes < 10 ? "0" + minutes : minutes,
+    	y = seconds < 10 ? "0" + seconds : seconds;
+
+    return x + ':' + y + 's';
+}
 
 function displayInformation(a, b) {
 	
-	var timePassed = a - b;//time elapsed between pause/resume
+	var timePassed = setTime(a - b);//time elapsed between pause/resume
 	
 	if (!document.getElementById('info')) {
 		
