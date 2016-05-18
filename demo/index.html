@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>	
+	<head lang='en-us'>
+		<meta charset="utf-8" />
+		<title>Video JS Plugin</title>
+
+		<!-- CSS -->
+		<link href="../plugin/css/videojs-plugin.css" rel="stylesheet" />
+		<link href="vjs-sublime-skin.min.css" rel="stylesheet" />
+			
+		<!-- Scripts -->			
+		<script src="http://vjs.zencdn.net/4.12/video.js"></script>
+		<script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> <!-- support IE8 -->
+		<script src="../plugin/js/counterPlugin.js"></script>
+		
+	</head>
+
+	<body>
+		<div class="video-container">
+
+			<video id="my-video" class="video-js vjs-sublime-skin" controls preload="auto" width="640" height="360" data-setup='{"techOrder": ["html5", "flash"]}'>
+				<source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/mp4'>
+				<source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type='video/webm'>
+				
+				<p class="vjs-no-js">
+					To view this video please enable JavaScript, and consider upgrading to a web browser that
+					<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+				</p>
+			</video>
+		</div>
+	</body>	
+	
+	<script>
+        
+        //add plugin to Video.js prototype
+        videojs.plugin('counterPlugin', counterPlugin);
+
+        //call plugin in video element (with id "my-video")
+        videojs('my-video').counterPlugin({ exampleOption: true });
+
+	</script>
+
+</html>
