@@ -20,11 +20,19 @@ function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseC
 	if (!infoContainer) {
 		
 		//create container
-		//console.log('no container for information');
-		document.getElementById('my-video').insertAdjacentHTML('beforeend',
-			'<div id="info"><p id="played">Played: <span>0</span></p><p id="paused">Paused: <span>1</span></p><p id="elapsed">Time elapsed: <span>00:5s</span></p></div>'
+		document.querySelectorAll('.vjs-control-bar')[0].insertAdjacentHTML('beforebegin',
+			'<div id="info"><p id="countPlayed">Played: <span>0</span></p><p id="countPaused">Paused: <span>0</span></p><p id="countElapsed">Time elapsed: <span>00:00</span></p></div>'
 		);		
 	}
+
+	//set play count in DOM
+	document.getElementById('countPlayed').getElementsByTagName('span')[0].innerHTML = resumeCount;
+	
+	//set pause count in DOM
+	document.getElementById('countPaused').getElementsByTagName('span')[0].innerHTML = pauseCount;
+	
+	//set time elapsed count in DOM
+	document.getElementById('countElapsed').getElementsByTagName('span')[0].innerHTML = timePassed;
 
 	//put information in container
 	console.log('Video resumed ' + resumeCount + ' times');
