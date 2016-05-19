@@ -15,10 +15,15 @@ function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseC
 	
 	var timePassed = setTime(lastActionTime, firstActionTime); //time elapsed between pause/resume
 	
-	if (!document.getElementById('info')) {
+	var infoContainer = document.getElementById('info');
+
+	if (!infoContainer) {
 		
 		//create container
 		//console.log('no container for information');
+		document.getElementById('my-video').insertAdjacentHTML('beforeend',
+			'<div id="info"><p id="played">Played: <span>0</span></p><p id="paused">Paused: <span>1</span></p><p id="elapsed">Time elapsed: <span>00:5s</span></p></div>'
+		);		
 	}
 
 	//put information in container
@@ -28,7 +33,7 @@ function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseC
 }
 
 function counterPlugin() {
-  
+	
 	//wait for videojs to be ready
 	videojs('my-video').ready(function(){
 
@@ -98,5 +103,4 @@ function counterPlugin() {
 		});
 
 	});
-
 };

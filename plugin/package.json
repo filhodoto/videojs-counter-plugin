@@ -1,0 +1,20 @@
+{
+  "name": "counter-plugin",
+  "preferGlobal": true,
+  "version": "0.0.1",
+  "author": "Gonçalo Ramalho <meet@goncaloramalho.com>",
+  "description": "A plugin for video.js",
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-load-plugins": "^1.2.2",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-ruby-sass": "^0.7.1",
+    "gulp-uglify": "^1.1.0",
+    "gulp-watch": "^1.1.0"
+  }
+}
