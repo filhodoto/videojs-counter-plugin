@@ -1,18 +1,19 @@
 
-//set value of time to a hh:mm format 
-function setTime(timePassed) {
+//set value of time to a mm:ss format 
+function setTime(lastActionTime, firstActionTime) {
 
-	var minutes = Math.floor(timePassed / 60),   
-    	seconds = Math.floor(timePassed - minutes * 60),
+	var timePassed = lastActionTime - firstActionTime,
+		minutes = firstActionTime != 0 ? Math.floor(timePassed / 60) : 0, //if first action = 0 then minutes = 00
+    	seconds = Math.floor(timePassed - Math.floor(timePassed / 60) * 60),
     	x = minutes < 10 ? "0" + minutes : minutes,
     	y = seconds < 10 ? "0" + seconds : seconds;
 
     return x + ':' + y + 's';
 }
 
-function displayInformation(a, b) {
+function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseCount) {
 	
-	var timePassed = setTime(a - b);//time elapsed between pause/resume
+	var timePassed = setTime(lastActionTime, firstActionTime); //time elapsed between pause/resume
 	
 	if (!document.getElementById('info')) {
 		
@@ -21,8 +22,9 @@ function displayInformation(a, b) {
 	}
 
 	//put information in container
+	console.log('Video resumed ' + resumeCount + ' times');
+	console.log('Video paused ' + pauseCount + ' times');
 	console.log('time elapsed between pause/resume is: ' + timePassed);
-
 }
 
 function counterPlugin() {
@@ -40,14 +42,6 @@ function counterPlugin() {
 				count: 0,
 				time: 0
 			};
-
-		// //action when video plays for the first time
-		// thisVideo.one('play', function () {
-		//   console.log('video starts for the first time');
-		//   //send information through false http request
-
-		//   videoResumed.firstPlay = true;
-		// });
 
 		//action when video resumes
 		thisVideo.on('play', function(e) {
@@ -71,12 +65,10 @@ function counterPlugin() {
 					videoResumed.count +=1;
 					
 					//save time of resuming
-					videoResumed.time = thisVideo.currentTime();
+					videoResumed.time = new Date().getTime() / 1000;
 
-					// console.log('Video resumed count: ' + videoResumed.count);
-					console.log('Video resumed at: ' + videoResumed.time );
-					displayInformation(videoResumed.time, videoPaused.time);
-
+					//display information
+					displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
 				}
 			}
 		});
@@ -86,20 +78,14 @@ function counterPlugin() {
 			
 			if(!thisVideo.seeking()) {
 
-				console.log('video paused');
-
 				//increment number of pauses
 				videoPaused.count +=1;
 				
 				//save time of pausing
-				videoPaused.time = thisVideo.currentTime();
+				videoPaused.time = new Date().getTime() / 1000;
 
-				//show information
-				// console.log('Video resume count: ' + videoResumed.count);
-				// console.log('Video paused count: ' + videoPaused.count);
-				console.log('Video paused at: ' + videoPaused.time );
-
-				displayInformation(videoPaused.time, videoResumed.time);
+				//display information
+				displayInformation(videoPaused.time, videoResumed.time, videoResumed.count, videoPaused.count);
 			}
 
 		});
@@ -108,7 +94,7 @@ function counterPlugin() {
 		thisVideo.on('ended', function(e) {
 			console.log('video finish');
 			//send information through false http request
-			//show information
+			//display information
 		});
 
 	});
