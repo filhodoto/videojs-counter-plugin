@@ -21,7 +21,7 @@ function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseC
 		
 		//create container
 		document.querySelectorAll('.vjs-control-bar')[0].insertAdjacentHTML('beforebegin',
-			'<div id="info"><p id="countPlayed">Played: <span>0</span></p><p id="countPaused">Paused: <span>0</span></p><p id="countElapsed">Time elapsed: <span>00:00</span></p></div>'
+			'<div id="info"><p id="countPlayed" class="entypo-play">Played: <span>0</span></p><p id="countPaused" class="entypo-pause">Paused: <span>0</span></p><p id="countElapsed" class="entypo-back-in-time">Time elapsed: <span>00:00</span></p></div>'
 		);		
 	}
 

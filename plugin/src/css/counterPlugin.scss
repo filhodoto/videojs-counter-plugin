@@ -1,5 +1,11 @@
 
 
+//setup icons font
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+
 #info {
 	font-family: 'Arial','Helvetica', Sans-serif;
 	width: 100%;
@@ -17,6 +23,14 @@
 		display: inline;
 		margin: 10px 15px 10px 0;
 		line-height: 100%;
-		font-size: 12px;	
+		font-size: 12px;
+
+		//icons 
+		&:before {
+			font-size: 15px;
+			margin: 0 5px 0 0;
+			position: relative;
+		}
 	}
 }
+
