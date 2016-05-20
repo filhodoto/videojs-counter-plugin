@@ -64,7 +64,7 @@ function counterPlugin(options) {
 
 		//create container for information in DOM
 		document.querySelectorAll('.vjs-control-bar')[0].insertAdjacentHTML('beforebegin',
-			'<div id="info"><p id="countPlayed" class="entypo-play">Played: <span>0</span></p><p id="countPaused" class="entypo-pause">Paused: <span>0</span></p><p id="countElapsed" class="entypo-back-in-time">Time elapsed pause/resume: <span>00:00</span></p></div>'
+			'<div id="info"><p id="countPlayed" class="entypo-play">Played: <span>0</span></p><p id="countPaused" class="entypo-pause">Paused: <span>0</span></p><p id="countElapsed" class="entypo-back-in-time">Time elapsed pause/resume: <span>00:00s</span></p></div>'
 		);
 
 		//action when video resumes
@@ -84,11 +84,11 @@ function counterPlugin(options) {
 					
 					//increment number of plays
 					videoResumed.count +=1;
+
+					//save time of resuming
+					videoResumed.time = new Date().getTime() / 1000;					
 				}
 				
-				//save time of resuming
-				videoResumed.time = new Date().getTime() / 1000;
-
 				//display information
 				displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
 
