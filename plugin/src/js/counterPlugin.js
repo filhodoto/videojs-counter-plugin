@@ -1,4 +1,5 @@
 
+
 //set value of time to a mm:ss format 
 function setTime(lastActionTime, firstActionTime) {
 
@@ -15,16 +16,6 @@ function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseC
 	
 	var timePassed = setTime(lastActionTime, firstActionTime); //time elapsed between pause/resume
 	
-	var infoContainer = document.getElementById('info');
-
-	if (!infoContainer) {
-		
-		//create container
-		document.querySelectorAll('.vjs-control-bar')[0].insertAdjacentHTML('beforebegin',
-			'<div id="info"><p id="countPlayed" class="entypo-play">Played: <span>0</span></p><p id="countPaused" class="entypo-pause">Paused: <span>0</span></p><p id="countElapsed" class="entypo-back-in-time">Time elapsed: <span>00:00</span></p></div>'
-		);		
-	}
-
 	//set play count in DOM
 	document.getElementById('countPlayed').getElementsByTagName('span')[0].innerHTML = resumeCount;
 	
@@ -46,15 +37,20 @@ function counterPlugin() {
 	videojs('my-video').ready(function(){
 
 		var thisVideo = this,
+			firstPlay = false,
 			videoResumed = {
 				count: 0,
-				time: 0,
-				firstPlay: false
+				time: 0
 			},
 			videoPaused = {
 				count: 0,
 				time: 0
 			};
+
+		//create container for information
+		document.querySelectorAll('.vjs-control-bar')[0].insertAdjacentHTML('beforebegin',
+			'<div id="info"><p id="countPlayed" class="entypo-play">Played: <span>0</span></p><p id="countPaused" class="entypo-pause">Paused: <span>0</span></p><p id="countElapsed" class="entypo-back-in-time">Time elapsed pause/resume: <span>00:00</span></p></div>'
+		);
 
 		//action when video resumes
 		thisVideo.on('play', function(e) {
@@ -62,27 +58,17 @@ function counterPlugin() {
 			//if user is not seeking video
 			if(!thisVideo.seeking()) {
 				
-				//if it's the first time video starts
-				if (!videoResumed.firstPlay) {
-					
-					console.log('video starts for the first time');
-					//send information through false http request
+				//increment number of plays
+				videoResumed.count +=1;
+				
+				//save time of resuming
+				videoResumed.time = new Date().getTime() / 1000;
 
-					videoResumed.firstPlay = true;					
-				}
-				else
-				{
-					//send information through false http request
-					
-					//increment number of plays
-					videoResumed.count +=1;
-					
-					//save time of resuming
-					videoResumed.time = new Date().getTime() / 1000;
+				//display information
+				displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
 
-					//display information
-					displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
-				}
+				//send information through false http request
+				
 			}
 		});
 
@@ -105,9 +91,11 @@ function counterPlugin() {
 
 		//action when video finishes
 		thisVideo.on('ended', function(e) {
-			console.log('video finish');
-			//send information through false http request
 			//display information
+			displayInformation(videoPaused.time, videoResumed.time, videoResumed.count, videoPaused.count);
+
+			//send information through false http request
+
 		});
 
 	});

@@ -1,35 +1,42 @@
-
+//set colors for plugin
+$backgroundColor: #FDFDFD;
+$borderColor: #EEEEEE;
+$fontColor: #959595;
+$iconsColor: #c3c3c3;
 
 //setup icons font
 [class*="entypo-"]:before {
   font-family: 'entypo', sans-serif;
 }
 
-
 #info {
 	font-family: 'Arial','Helvetica', Sans-serif;
+	border: 1px solid $borderColor;
 	width: 100%;
 	height: auto;
-	background: rgba(255,255,255, 0.8);
+	background: $backgroundColor;
 	position: absolute;
 	right: 0;
 	z-index: 1;
-	opacity: 0.5;
-	padding: 10px 20px;
+	padding: 0 15px;
 	box-sizing: border-box;
 
 	p {
-		color: #000;
+		color: $fontColor;
 		display: inline;
-		margin: 10px 15px 10px 0;
+		margin: 0 12px 0 0;
+		padding: 10px 12px 10px 0;
 		line-height: 100%;
 		font-size: 12px;
+		border-right: 1px solid $borderColor;
+		display: inline-block;
 
 		//icons 
 		&:before {
 			font-size: 15px;
 			margin: 0 5px 0 0;
 			position: relative;
+			color: #iconsColor;
 		}
 	}
 }
