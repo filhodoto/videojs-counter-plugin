@@ -1,3 +1,22 @@
+function sendInformation(data) {
+
+	var request = new XMLHttpRequest();
+	request.open('POST', 'http://www.example.com', true);
+	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+	
+	//check for error/success status - in this case we know it will fail 
+	request.onreadystatechange = function (oEvent) {  
+		if (request.readyState === 4 && request.status === 200) {  
+			//log success
+			console.log(request.responseText)  
+		} else {  
+			//log error
+			console.log('Failed - Error ' + request.statusText);  
+		}  
+	}; 	
+
+	request.send(data);
+}
 
 //set value of time to a mm:ss format 
 function setTime(lastActionTime, firstActionTime) {
@@ -69,6 +88,8 @@ function counterPlugin() {
 				//display information
 				displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
 
+				//send information through false http request
+				sendInformation(JSON.stringify('Video Played ' + videoResumed.count + ' time' + ' and Paused ' + videoPaused.count + ' time'));			
 			}
 		});
 
@@ -87,6 +108,9 @@ function counterPlugin() {
 				
 				//save time of pausing
 				videoPaused.time = new Date().getTime() / 1000;
+
+				//display information
+				displayInformation(videoPaused.time, videoResumed.time, videoResumed.count, videoPaused.count);
 			}
 
 		});
@@ -94,6 +118,7 @@ function counterPlugin() {
 		//action only when video finishes
 		thisVideo.on('ended', function(e) {
 			//send information through false http request
+			sendInformation(JSON.stringify('Video Played ' + videoResumed.count + ' time' + ' and Paused ' + videoPaused.count + ' time'));
 		});
 
 	});

@@ -45,7 +45,6 @@ gulp.task('js', function () {
     .pipe(gulp.dest(config.demo));     
 });
 
-
 //watch change in files
 gulp.task('watch', function () {
     gulp.watch('src/**/*.scss', ['sass']);
