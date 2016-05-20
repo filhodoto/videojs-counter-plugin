@@ -20,10 +20,25 @@ For the plugin to work you link the js and css files and call the plugin in your
    //add plugin to Video.js prototype
     videojs.plugin('counterPlugin', counterPlugin);
 
-    //call plugin in video element (with id "my-video")
-    videojs('my-video').counterPlugin();    
+    //call plugin in video element (with id "my-video") and set the url the information should be sent to
+    videojs('my-video').counterPlugin({
+		destination: 'http://www.example.com'
+    });    
 </script>
 ```
+## Styling
+
+Too change the styles of the plugin check the counterPlugin.scss file nad change it at you will and then compile it with sass  to create a new .css file that you can use. The colors can be set by changing the values of the variables defined on top of the file
+
+```css
+
+$backgroundColor: #FDFDFD;
+$borderColor: #EEEEEE;
+$fontColor: #959595;
+$iconsColor: #c3c3c3;
+
+```
+
 
 ## License
 

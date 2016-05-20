@@ -37,7 +37,9 @@
         videojs.plugin('counterPlugin', counterPlugin);
 
         //call plugin in video element (with id "my-video")
-        videojs('my-video').counterPlugin();
+        videojs('my-video').counterPlugin({
+			destination: 'http://www.example.com'
+        });
 
 	</script>
 

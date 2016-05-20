@@ -1,55 +1,57 @@
-function sendInformation(data) {
 
-	var request = new XMLHttpRequest();
-	request.open('POST', 'http://www.example.com', true);
-	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+function counterPlugin(options) {
 	
-	//check for error/success status - in this case we know it will fail 
-	request.onreadystatechange = function (oEvent) {  
-		if (request.readyState === 4 && request.status === 200) {  
-			//log success
-			console.log(request.responseText)  
-		} else {  
-			//log error
-			console.log('Failed - Error ' + request.statusText);  
-		}  
-	}; 	
+	function sendInformation(data, destinationURL) {
 
-	request.send(data);
-}
+		var request = new XMLHttpRequest();
+		request.open('POST', destinationURL, true);
+		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+		
+		//check for error/success status - in this case we know it will fail 
+		request.onreadystatechange = function (oEvent) {  
+			if (request.readyState === 4 && request.status === 200) {  
+				//log success
+				console.log(request.responseText)  
+			} else {  
+				//log error
+				console.log('Failed - Error ' + request.statusText);  
+			}  
+		}; 	
 
-//set value of time to a mm:ss format 
-function setTime(lastActionTime, firstActionTime) {
+		request.send(data);
+	}
 
-	var timePassed = lastActionTime - firstActionTime,
-		minutes = firstActionTime != 0 ? Math.floor(timePassed / 60) : 0, //if first action = 0 then minutes = 00
-    	seconds = Math.floor(timePassed - Math.floor(timePassed / 60) * 60),
-    	x = minutes < 10 ? "0" + minutes : minutes,
-    	y = seconds < 10 ? "0" + seconds : seconds;
+	//set value of time to a mm:ss format 
+	function setTime(lastActionTime, firstActionTime) {
 
-    return x + ':' + y + 's';
-}
+		var timePassed = lastActionTime - firstActionTime,
+			minutes = firstActionTime != 0 ? Math.floor(timePassed / 60) : 0, //if first action = 0 then minutes = 00
+	    	seconds = Math.floor(timePassed - Math.floor(timePassed / 60) * 60),
+	    	x = minutes < 10 ? "0" + minutes : minutes,
+	    	y = seconds < 10 ? "0" + seconds : seconds;
 
-function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseCount) {
-	
-	var timePassed = setTime(lastActionTime, firstActionTime); //time elapsed between pause/resume
-	
-	//set play count in DOM
-	document.getElementById('countPlayed').getElementsByTagName('span')[0].innerHTML = resumeCount;
-	
-	//set pause count in DOM
-	document.getElementById('countPaused').getElementsByTagName('span')[0].innerHTML = pauseCount;
-	
-	//set time elapsed count in DOM
-	document.getElementById('countElapsed').getElementsByTagName('span')[0].innerHTML = timePassed;
-}
+	    return x + ':' + y + 's';
+	}
 
-function counterPlugin() {
-	
+	function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseCount) {
+		
+		var timePassed = setTime(lastActionTime, firstActionTime); //time elapsed between pause/resume
+		
+		//set play count in DOM
+		document.getElementById('countPlayed').getElementsByTagName('span')[0].innerHTML = resumeCount;
+		
+		//set pause count in DOM
+		document.getElementById('countPaused').getElementsByTagName('span')[0].innerHTML = pauseCount;
+		
+		//set time elapsed count in DOM
+		document.getElementById('countElapsed').getElementsByTagName('span')[0].innerHTML = timePassed;
+	}
+
 	//wait for videojs to be ready
 	videojs('my-video').ready(function(){
 
 		var thisVideo = this,
+			destinationURL = options.destination,
 			firstPlay = false,
 			videoResumed = {
 				count: 0,
@@ -60,7 +62,7 @@ function counterPlugin() {
 				time: 0
 			};
 
-		//create container for information
+		//create container for information in DOM
 		document.querySelectorAll('.vjs-control-bar')[0].insertAdjacentHTML('beforebegin',
 			'<div id="info"><p id="countPlayed" class="entypo-play">Played: <span>0</span></p><p id="countPaused" class="entypo-pause">Paused: <span>0</span></p><p id="countElapsed" class="entypo-back-in-time">Time elapsed pause/resume: <span>00:00</span></p></div>'
 		);
@@ -74,8 +76,10 @@ function counterPlugin() {
 				//if it's the first time user press play
 				if(!firstPlay) {
 					
+					//track it using a variable
 					firstPlay = true;
 
+				//if it's not the first time
 				} else {
 					
 					//increment number of plays
@@ -88,8 +92,8 @@ function counterPlugin() {
 				//display information
 				displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
 
-				//send information through false http request
-				sendInformation(JSON.stringify('Video Played ' + videoResumed.count + ' time' + ' and Paused ' + videoPaused.count + ' time'));			
+				//send information through http request
+				sendInformation(JSON.stringify('Video Played ' + videoResumed.count + ' time' + ' and Paused ' + videoPaused.count + ' time'), destinationURL);			
 			}
 		});
 
@@ -117,8 +121,9 @@ function counterPlugin() {
 
 		//action only when video finishes
 		thisVideo.on('ended', function(e) {
-			//send information through false http request
-			sendInformation(JSON.stringify('Video Played ' + videoResumed.count + ' time' + ' and Paused ' + videoPaused.count + ' time'));
+			
+			//send information through http request
+			sendInformation(JSON.stringify('Video Played ' + videoResumed.count + ' time' + ' and Paused ' + videoPaused.count + ' time'), destinationURL);
 		});
 
 	});
