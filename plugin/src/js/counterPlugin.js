@@ -1,5 +1,4 @@
 
-
 //set value of time to a mm:ss format 
 function setTime(lastActionTime, firstActionTime) {
 
@@ -24,11 +23,6 @@ function displayInformation(lastActionTime, firstActionTime, resumeCount, pauseC
 	
 	//set time elapsed count in DOM
 	document.getElementById('countElapsed').getElementsByTagName('span')[0].innerHTML = timePassed;
-
-	//put information in container
-	console.log('Video resumed ' + resumeCount + ' times');
-	console.log('Video paused ' + pauseCount + ' times');
-	console.log('time elapsed between pause/resume is: ' + timePassed);
 }
 
 function counterPlugin() {
@@ -58,8 +52,16 @@ function counterPlugin() {
 			//if user is not seeking video
 			if(!thisVideo.seeking()) {
 				
-				//increment number of plays
-				videoResumed.count +=1;
+				//if it's the first time user press play
+				if(!firstPlay) {
+					
+					firstPlay = true;
+
+				} else {
+					
+					//increment number of plays
+					videoResumed.count +=1;
+				}
 				
 				//save time of resuming
 				videoResumed.time = new Date().getTime() / 1000;
@@ -67,35 +69,31 @@ function counterPlugin() {
 				//display information
 				displayInformation(videoResumed.time, videoPaused.time, videoResumed.count, videoPaused.count);
 
-				//send information through false http request
-				
 			}
 		});
 
 		//action when video pauses
 		thisVideo.on('pause', function(e) {
 			
+			//check if video is not seeking and hasn't ended
 			if(!thisVideo.seeking()) {
 
-				//increment number of pauses
-				videoPaused.count +=1;
+				//if the pausing is not done beacause of the video ending
+				if(!thisVideo.ended()) {
+					
+					//increment number of pauses
+					videoPaused.count +=1;
+				}
 				
 				//save time of pausing
 				videoPaused.time = new Date().getTime() / 1000;
-
-				//display information
-				displayInformation(videoPaused.time, videoResumed.time, videoResumed.count, videoPaused.count);
 			}
 
 		});
 
-		//action when video finishes
+		//action only when video finishes
 		thisVideo.on('ended', function(e) {
-			//display information
-			displayInformation(videoPaused.time, videoResumed.time, videoResumed.count, videoPaused.count);
-
 			//send information through false http request
-
 		});
 
 	});
